@@ -3,10 +3,12 @@ package br.com.alunoonline.api.dto;
 public record DisciplinaResponseDTO(
         Long id,
         String nome,
-        String descriao,
-        Integer cargarHorario,
+        String descricao,
+        Integer cargaHoraria,
         Boolean excluido,
         Long professorId,
-        String professorNome
+        String professorNome,
+        Long cursoId,
+        String cursoNome
 ) {
 }

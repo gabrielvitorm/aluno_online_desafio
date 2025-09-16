@@ -11,9 +11,12 @@ public interface DisciplinaMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "professor", ignore = true)
+    @Mapping(target = "curso", ignore = true)
     Disciplina toEntity(DisciplinaRequestDTO dto);
 
     @Mapping(target = "professorId", source = "professor.id")
     @Mapping(target = "professorNome", source = "professor.nome")
+    @Mapping(target = "cursoId", source = "curso.id")
+    @Mapping(target = "cursoNome", source = "curso.nome")
     DisciplinaResponseDTO toDTO(Disciplina disciplina);
 }

@@ -3,8 +3,10 @@ package br.com.alunoonline.api.service;
 import br.com.alunoonline.api.dto.DisciplinaRequestDTO;
 import br.com.alunoonline.api.dto.DisciplinaResponseDTO;
 import br.com.alunoonline.api.mapper.DisciplinaMapper;
+import br.com.alunoonline.api.model.Curso;
 import br.com.alunoonline.api.model.Disciplina;
 import br.com.alunoonline.api.model.Professor;
+import br.com.alunoonline.api.repository.CursoRepository;
 import br.com.alunoonline.api.repository.DisciplinaRepository;
 import br.com.alunoonline.api.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ public class DisciplinaServiceImpl implements DisciplinaService {
     private final DisciplinaRepository disciplinaRepository;
     private final DisciplinaMapper disciplinaMapper;
     private final ProfessorRepository professorRepository;
+    private final CursoRepository cursoRepository;
 
 
     @Override
@@ -28,6 +31,7 @@ public class DisciplinaServiceImpl implements DisciplinaService {
         Disciplina disciplina = disciplinaMapper.toEntity(dto);
 
         disciplina.setProfessor(buscarProfessor(dto.professorId()));
+        disciplina.setCurso(buscarCurso(dto.cursoId()));
         disciplina.setExcluido(false);
 
         return disciplinaMapper.toDTO(disciplinaRepository.save(disciplina));
@@ -78,5 +82,11 @@ public class DisciplinaServiceImpl implements DisciplinaService {
         return professorRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Professor não encontrado"));
+    }
+
+    private Curso buscarCurso(Long id) {
+        return cursoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Curso não encontrado"));
     }
 }

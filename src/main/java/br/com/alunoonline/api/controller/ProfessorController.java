@@ -34,7 +34,7 @@ public class ProfessorController {
         return ResponseEntity.ok(professorService.listarProfessorPorId(id));
     }
 
-    @PutMapping("/editar-disciplina/{id}")
+    @PutMapping("/editar-professor/{id}")
     public ResponseEntity<ProfessorResponseDTO> atualizarProfessor(
             @PathVariable Long id,
             @Valid @RequestBody ProfessorRequestDTO dto

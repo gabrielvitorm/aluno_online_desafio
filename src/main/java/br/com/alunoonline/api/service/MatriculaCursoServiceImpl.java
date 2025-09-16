@@ -104,7 +104,7 @@ public class MatriculaCursoServiceImpl implements MatriculaCursoService {
         }
 
         matriculaCurso.setStatus(MatriculaCursoStatusEnum.CONCLUIDO);
-        matriculaCurso.setDataConclusão(LocalDateTime.now());
+        matriculaCurso.setDataConclusao(LocalDateTime.now());
 
         return matriculaCursoMapper.toDTO(matriculaCursoRepository.save(matriculaCurso));
     }

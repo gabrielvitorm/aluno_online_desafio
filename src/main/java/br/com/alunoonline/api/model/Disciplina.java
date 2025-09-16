@@ -28,11 +28,11 @@ public class Disciplina {
     @Column(name = "excluido")
     private Boolean excluido;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "professor_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "professor_id", referencedColumnName = "id", nullable = false)
     private Professor professor;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "curso_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "curso_id", referencedColumnName = "id", nullable = false)
     private Curso curso;
 }

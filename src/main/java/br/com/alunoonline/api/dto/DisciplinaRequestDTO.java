@@ -15,6 +15,9 @@ public record DisciplinaRequestDTO(
         Integer cargaHoraria,
 
         @NotNull(message = "Professor Id é obrigatório")
-        Long professorId
+        Long professorId,
+
+        @NotNull(message = "Curso Id é obrigatório")
+        Long cursoId
 ) {
 }

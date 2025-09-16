@@ -52,5 +52,5 @@ public class MatriculaCurso {
     private LocalDateTime dataTrancamento;
 
     @Column(name = "data_conclusao")
-    private LocalDateTime dataConclusão;
+    private LocalDateTime dataConclusao;
 }
