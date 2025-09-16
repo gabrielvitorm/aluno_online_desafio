@@ -24,13 +24,13 @@ public class Aluno {
     @Column(name = "nome", nullable = false, length = 200)
     private String nome;
 
-    @Column(name = "email", nullable = false, length = 200)
+    @Column(name = "email", nullable = false, length = 200, unique = true)
     private String email;
 
-    @Column(name = "rg", nullable = false, length = 12)
+    @Column(name = "rg", nullable = false, length = 12, unique = true)
     private String rg;
 
-    @Column(name = "cpf", nullable = false, length = 15)
+    @Column(name = "cpf", nullable = false, length = 15, unique = true)
     private String cpf;
 
     @Column(name = "telefone", nullable = false, length = 12)
@@ -41,16 +41,16 @@ public class Aluno {
 
     @Column(name = "genero", nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private GeneroEnum generoEnum;
+    private GeneroEnum genero;
 
     @Column(name = "excluido", nullable = false)
     private Boolean excluido;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "curso_id", referencedColumnName = "id")
     private Curso curso;
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     private Endereco endereco;
 

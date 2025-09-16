@@ -18,4 +18,8 @@ public interface MatriculaCursoService {
     MatriculaCursoResponseDTO reativarMatricula(Long id);
 
     MatriculaCursoResponseDTO concluirMatricula(Long id);
+
+    MatriculaCursoResponseDTO atualizarMatricula(Long id, MatriculaCursoRequestDTO dto);
+
+    MatriculaCursoResponseDTO deletarMatricula(Long id);
 }

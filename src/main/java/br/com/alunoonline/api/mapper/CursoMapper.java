@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 public interface CursoMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "tipoCurso", source = "tipoCurso")
     Curso toEntity(CursoRequestDTO dto);
 
     CursoResponseDTO toDTO(Curso curso);

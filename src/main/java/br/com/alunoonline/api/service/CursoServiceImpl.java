@@ -53,7 +53,7 @@ public class CursoServiceImpl implements CursoService{
                         "Curso repository"));
 
         curso.setNome(dto.nome());
-        curso.setTipoCursoEnum(dto.tipoCurso());
+        curso.setTipoCurso(dto.tipoCurso());
 
         return cursoMapper.toDTO(cursoRepository.save(curso));
     }

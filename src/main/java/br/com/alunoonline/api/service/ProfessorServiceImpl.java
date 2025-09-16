@@ -60,7 +60,7 @@ public class ProfessorServiceImpl implements ProfessorService{
         professor.setCpf(dto.cpf());
         professor.setTelefone(dto.telefone());
         professor.setIdade(dto.idade());
-        professor.setGeneroEnum(dto.genero());
+        professor.setGenero(dto.genero());
         professor.setEndereco(enderecoMapper.toEntity(dto.endereco()));
 
         return professorMapper.toDTO(professorRepository.save(professor));

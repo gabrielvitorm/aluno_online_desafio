@@ -13,6 +13,6 @@ public interface ProfessorMapper {
     Professor toEntity(ProfessorRequestDTO dto);
 
 
-    @Mapping(target = "genero", source = "generoEnum")
+    @Mapping(target = "genero", source = "genero")
     ProfessorResponseDTO toDTO(Professor professor);
 }

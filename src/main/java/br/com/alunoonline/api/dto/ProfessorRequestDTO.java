@@ -27,7 +27,7 @@ public record ProfessorRequestDTO(
         @NotNull(message = "Idade é obriagatório")
         Integer idade,
 
-        @NotBlank(message = "Gênero é obrigatório")
+        @NotNull(message = "Gênero é obrigatório")
         GeneroEnum genero,
 
         @Valid

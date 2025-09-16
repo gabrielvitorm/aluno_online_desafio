@@ -41,6 +41,9 @@ public class MatriculaCurso {
     @Column(name = "matricula_status")
     private MatriculaCursoStatusEnum status;
 
+    @Column(name = "excluido")
+    private boolean excluido;
+
     @CreationTimestamp
     @Column(name = "data_matricula", nullable = false)
     private LocalDateTime dataMatricula;

@@ -49,7 +49,7 @@ public class MatriculaDisciplina {
     private PeriodoLetivoEnum periodoLetivo;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "situacao_status", nullable = false, length = 20)
+    @Column(name = "matricula_status", nullable = false, length = 20)
     private MatriculaCursoStatusEnum matriculaStatus;
 
     @Enumerated(EnumType.STRING)

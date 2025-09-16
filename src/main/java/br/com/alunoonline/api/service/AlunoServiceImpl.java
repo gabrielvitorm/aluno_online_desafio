@@ -25,12 +25,14 @@ public class AlunoServiceImpl implements AlunoService {
     private final EnderecoMapper enderecoMapper;
     private final CursoRepository cursoRepository;
 
+    @Transactional
     @Override
     public AlunoResponseDTO criarAluno(AlunoRequestDTO dto) {
         Aluno aluno = alunoMapper.toEntity(dto);
 
         aluno.setCurso(buscarCurso(dto.cursoId()));
         aluno.setExcluido(false);
+        aluno.setEndereco(enderecoMapper.toEntity(dto.endereco()));
 
         return alunoMapper.toDTO(alunoRepository.save(aluno));
     }
@@ -64,7 +66,7 @@ public class AlunoServiceImpl implements AlunoService {
         aluno.setCpf(dto.cpf());
         aluno.setTelefone(dto.telefone());
         aluno.setIdade(dto.idade());
-        aluno.setGeneroEnum(dto.genero());
+        aluno.setGenero(dto.genero());
         aluno.setCurso(buscarCurso(dto.cursoId()));
         aluno.setEndereco(enderecoMapper.toEntity(dto.endereco()));
 

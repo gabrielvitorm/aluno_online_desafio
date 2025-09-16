@@ -24,9 +24,9 @@ public class Curso {
     @Column(name = "nome", nullable = false, length = 200)
     private String nome;
 
-    @Column(name = "tipo_curso", nullable = false)
+    @Column(name = "tipo_curso")
     @Enumerated(value = EnumType.STRING)
-    private TipoCursoEnum tipoCursoEnum;
+    private TipoCursoEnum tipoCurso;
 
     @Column(name = "exluido")
     private Boolean excluido;

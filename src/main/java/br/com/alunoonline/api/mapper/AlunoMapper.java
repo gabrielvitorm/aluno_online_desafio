@@ -13,10 +13,12 @@ public interface AlunoMapper {
     @Mapping(target = "endereco", ignore = true)
     @Mapping(target = "curso", ignore = true)
     @Mapping(target = "excluido", ignore = true)
+    @Mapping(target = "genero", source = "genero")
     Aluno toEntity(AlunoRequestDTO dto);
 
-    @Mapping(target = "genero", source = "generoEnum")
+    @Mapping(target = "genero", source = "genero")
     @Mapping(target = "cursoId", source = "curso.id")
     @Mapping(target = "cursoNome", source = "curso.nome")
+    @Mapping(target = "endereco", source = "endereco")
     AlunoResponseDTO toDTO(Aluno aluno);
 }
