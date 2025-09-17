@@ -1,5 +1,6 @@
 package br.com.alunoonline.api.dto;
 
+import br.com.alunoonline.api.enums.PeriodoLetivoEnum;
 import br.com.alunoonline.api.enums.SituacaoStatusEnum;
 
 public record MatriculaDisciplinaResponseDTO(
@@ -8,10 +9,10 @@ public record MatriculaDisciplinaResponseDTO(
         String alunoNome,
         Long disciplinaId,
         String disciplinaNome,
-        Long cursoId,
-        String cursoNome,
+        Long matriculaCursoId,
+        String matriculaCursoNome,
         Integer anoLetivo,
-        Integer periodo,
+        PeriodoLetivoEnum periodoLetivo,
         SituacaoStatusEnum status,
         Double nota1,
         Double nota2,

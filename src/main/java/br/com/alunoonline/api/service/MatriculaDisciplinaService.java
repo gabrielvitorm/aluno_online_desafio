@@ -18,5 +18,5 @@ public interface MatriculaDisciplinaService {
 
     MatriculaDisciplinaResponseDTO atualizarMatricula(Long id, MatriculaDisciplinaRequestDTO dto);
 
-    MatriculaDisciplinaResponseDTO emitirHistorico(Long id);
+    HistoricoAlunoResponseDTO emitirHistorico(Long id);
 }

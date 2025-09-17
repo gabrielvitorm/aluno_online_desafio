@@ -10,6 +10,6 @@ public record HistoricoAlunoResponseDTO(
         Double nota1,
         Double nota2,
         Double media,
-        MatriculaCursoStatusEnum status
+        MatriculaCursoStatusEnum matriculaStatus
 ) {
 }

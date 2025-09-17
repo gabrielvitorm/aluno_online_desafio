@@ -1,200 +1,174 @@
 package br.com.alunoonline.api.service;
 
 import br.com.alunoonline.api.dto.*;
+import br.com.alunoonline.api.enums.MatriculaCursoStatusEnum;
+import br.com.alunoonline.api.enums.SituacaoStatusEnum;
+import br.com.alunoonline.api.mapper.MatriculaDisciplinaMapper;
+import br.com.alunoonline.api.model.Aluno;
+import br.com.alunoonline.api.model.Disciplina;
+import br.com.alunoonline.api.model.MatriculaCurso;
+import br.com.alunoonline.api.model.MatriculaDisciplina;
+import br.com.alunoonline.api.repository.AlunoRepository;
+import br.com.alunoonline.api.repository.DisciplinaRepository;
+import br.com.alunoonline.api.repository.MatriculaCursoRepository;
+import br.com.alunoonline.api.repository.MatriculaDisciplinaRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class MatriculaDisciplinaServiceImpl implements MatriculaDisciplinaService {
+
+    public static final double MEDIA_PARA_APROVACAO = 7.0;
+    public static final int QNT_NOTAS = 2;
+
+    private final MatriculaDisciplinaRepository matriculaDisciplinaRepository;
+    private final AlunoRepository alunoRepository;
+    private final DisciplinaRepository disciplinaRepository;
+    private final MatriculaCursoRepository matriculaCursoRepository;
+    private final MatriculaDisciplinaMapper matriculaDisciplinaMapper;
+
+    @Transactional
     @Override
     public MatriculaDisciplinaResponseDTO criarMatricula(MatriculaDisciplinaRequestDTO dto) {
-        return null;
+        MatriculaDisciplina matriculaDisciplina = matriculaDisciplinaMapper.toEntity(dto);
+
+        matriculaDisciplina.setAluno(buscarAluno(dto.alunoId()));
+        matriculaDisciplina.setDisciplina(buscarDisciplina(dto.disciplinaId()));
+        matriculaDisciplina.setMatriculaCurso(buscarCurso(dto.matriculaCursoId()));
+        matriculaDisciplina.setMatriculaStatus(MatriculaCursoStatusEnum.MATRICULADO);
+
+        return matriculaDisciplinaMapper.toDTO(matriculaDisciplinaRepository.save(matriculaDisciplina));
     }
 
     @Override
     public List<MatriculaDisciplinaResponseDTO> listarMatriculas() {
-        return List.of();
+        return matriculaDisciplinaRepository.findAll().stream()
+                .map(matriculaDisciplinaMapper::toDTO)
+                .toList();
     }
 
     @Override
     public MatriculaDisciplinaResponseDTO listarPorId(Long id) {
-        return null;
+        MatriculaDisciplina matriculaDisciplina = matriculaDisciplinaRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Matricula não encontrada"));
+
+        return matriculaDisciplinaMapper.toDTO(matriculaDisciplina);
     }
 
+    @Transactional
     @Override
     public MatriculaDisciplinaResponseDTO atualizarNotas(Long id, AtualizarNotasRequestDTO dto) {
-        return null;
+        MatriculaDisciplina matriculaDisciplina = matriculaDisciplinaRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Matricula não encontrada"));
+
+        validarNotas(dto.nota1(), dto.nota2());
+
+        matriculaDisciplina.setNota1(dto.nota1());
+        matriculaDisciplina.setNota2(dto.nota2());
+
+        return matriculaDisciplinaMapper.toDTO(matriculaDisciplinaRepository.save(matriculaDisciplina));
+
     }
 
+    @Transactional
     @Override
     public MatriculaDisciplinaResponseDTO trancarDisciplina(Long id) {
-        return null;
+        MatriculaDisciplina matriculaDisciplina = matriculaDisciplinaRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Matricula não encontrada"));
+
+        validarStatusMatricula(matriculaDisciplina);
+
+        matriculaDisciplina.setMatriculaStatus(MatriculaCursoStatusEnum.TRANCADO);
+
+        return matriculaDisciplinaMapper.toDTO(matriculaDisciplinaRepository.save(matriculaDisciplina));
     }
 
+    @Transactional
     @Override
     public MatriculaDisciplinaResponseDTO atualizarMatricula(Long id, MatriculaDisciplinaRequestDTO dto) {
         return null;
     }
 
+    @Transactional
     @Override
-    public MatriculaDisciplinaResponseDTO emitirHistorico(Long id) {
-        return null;
+    public HistoricoAlunoResponseDTO emitirHistorico(Long id) {
+        MatriculaDisciplina matriculaDisciplina = matriculaDisciplinaRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Matrícula não encontrada"));
+
+
+        double media = calcularMedia(matriculaDisciplina.getNota1(),matriculaDisciplina.getNota2());
+
+        alterarStatus(matriculaDisciplina, media);
+
+        validarStatusMatricula(matriculaDisciplina);
+
+        alterarStatus(matriculaDisciplina, media);
+
+        matriculaDisciplinaRepository.save(matriculaDisciplina);
+
+        return matriculaDisciplinaMapper.toHistoricoDTO(matriculaDisciplina, media);
     }
 
-//    public static final double MEDIA_PARA_APROVACAO = 7.0;
-//    public static final int QNT_NOTAS = 2;
-//
-//    private final MatriculaDisciplinaRepository matriculaDisciplinaRepository;
-//    private final MatriculaCursoMapper matriculaCursoMapper;
-//    private final AlunoRepository alunoRepository;
-//    private final DisciplinaRepository disciplinaRepository;
-//
-//    @Transactional
-//    @Override
-//    public MatriculaCursoResponseDTO criarMatricula(MatriculaCursoRequestDTO dto) {
-//        MatriculaCurso matriculaCurso = matriculaCursoMapper.toEntity(dto);
-//
-//        if (matriculaDisciplinaRepository.existsByAlunoIdAndDisciplinaIdAndIdNot(dto.alunoId(), dto.disciplinaId(), matriculaCurso.getId())) {
-//            throw new ResponseStatusException(HttpStatus.CONFLICT,
-//                    "Aluno já matriculado nesta disciplina.");
-//        }
-//
-//        matriculaCurso.setAluno(buscarAluno(dto.alunoId()));
-//        matriculaCurso.setStatus(MatriculaCursoStatusEnum.MATRICULADO);
-//
-//        return matriculaCursoMapper.toDTO(matriculaDisciplinaRepository.save(matriculaCurso));
-//    }
-//
-//    @Override
-//    public List<MatriculaCursoResponseDTO> listarMatriculas() {
-//        return matriculaDisciplinaRepository.findAll().stream()
-//                .map(matriculaCursoMapper::toDTO)
-//                .toList();
-//    }
-//
-//    @Override
-//    public MatriculaCursoResponseDTO listarMatriculaPorId(Long id) {
-//        MatriculaCurso matriculaCurso = matriculaDisciplinaRepository.findById(id)
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-//                        "Matrícula não encontrada"));
-//
-//        return matriculaCursoMapper.toDTO(matriculaCurso);
-//    }
-//
-//    @Transactional
-//    @Override
-//    public MatriculaCursoResponseDTO atualizarMatricula(Long id, MatriculaCursoRequestDTO dto) {
-//        MatriculaCurso matriculaCurso = buscarMatricula(id);
-//
-//        matriculaCurso.setAluno(buscarAluno(dto.alunoId()));
-//
-//        return matriculaCursoMapper.toDTO(matriculaDisciplinaRepository.save(matriculaCurso));
-//    }
-//
-//    @Transactional
-//    @Override
-//    public MatriculaCursoResponseDTO trancarMatricula(Long id) {
-//        MatriculaCurso matriculaCurso = buscarMatricula(id);
-//
-//        if (!matriculaCurso.getStatus().equals(MatriculaCursoStatusEnum.MATRICULADO)) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-//                    "Só é possível trancar o curso com o status MATRICULADO");
-//        }
-//
-//        if (matriculaCurso.getStatus() == MatriculaCursoStatusEnum.APROVADO || matriculaCurso.getStatus() == MatriculaCursoStatusEnum.REPROVADO) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-//                    "Não é possível trancar matrícula já finalizada.");
-//        }
-//
-//        matriculaCurso.setStatus(MatriculaCursoStatusEnum.TRANCADO);
-//
-//        return matriculaCursoMapper.toDTO(matriculaDisciplinaRepository.save(matriculaCurso));
-//    }
-//
-//    @Transactional
-//    @Override
-//    public MatriculaCursoResponseDTO atualizarNotas(Long id, AtualizarNotasRequestDTO dto) {
-//        MatriculaCurso matriculaCurso = buscarMatricula(id);
-//
-//        validarStatusMatricula(matriculaCurso);
-//
-//        validarNotas(dto.nota1(), dto.nota2());
-//
-//        matriculaCurso.setNota1(dto.nota1());
-//        matriculaCurso.setNota2(dto.nota2());
-//
-//        double media = calcularMedia(matriculaCurso.getNota1(), matriculaCurso.getNota2());
-//
-//        alterarStatus(matriculaCurso, media);
-//
-//        return matriculaCursoMapper.toDTO(matriculaDisciplinaRepository.save(matriculaCurso));
-//    }
-//
-//    @Transactional
-//    @Override
-//    public HistoricoAlunoResponseDTO emitirHistorico(Long id) {
-//        MatriculaCurso matriculaCurso = buscarMatricula(id);
-//
-//        validarNotas(matriculaCurso.getNota1(), matriculaCurso.getNota2());
-//
-//        double media = calcularMedia(matriculaCurso.getNota1(), matriculaCurso.getNota2());
-//
-//        validarStatusMatricula(matriculaCurso);
-//
-//        alterarStatus(matriculaCurso, media);
-//
-//        matriculaDisciplinaRepository.save(matriculaCurso);
-//
-//        return matriculaCursoMapper.toHistoricoDTO(matriculaCurso, media);
-//    }
-//
-//    private MatriculaCurso buscarMatricula(Long id) {
-//        return matriculaDisciplinaRepository.findById(id)
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-//                        "Matrícula não encontrada"));
-//    }
-//
-//    private Aluno buscarAluno(Long id) {
-//        return alunoRepository.findById(id)
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-//                        "Aluno não encontrado"));
-//    }
-//
-//    private Disciplina buscarDisciplina(Long id) {
-//        return disciplinaRepository.findById(id)
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-//                        "Disciplina não encontrada"));
-//    }
-//
-//    private void validarNotas(Double nota1, Double nota2) {
-//        if (nota1 == null || nota2 == null) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-//                    "As duas notas são obrigatórias.");
-//        }
-//        if (nota1 < 0 || nota1 > 10 || nota2 < 0 || nota2 > 10) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-//                    "Notas devem estar entre 0 e 10.");
-//        }
-//    }
-//
-//    private double calcularMedia(Double nota1, Double nota2) {
-//        return (nota1 + nota2) / QNT_NOTAS;
-//    }
-//
-//    private void alterarStatus(MatriculaCurso matriculaCurso, Double media) {
-//        matriculaCurso.setStatus(
-//                media >= MEDIA_PARA_APROVACAO
-//                        ? MatriculaCursoStatusEnum.APROVADO
-//                        : MatriculaCursoStatusEnum.REPROVADO);
-//    }
-//
-//    private void validarStatusMatricula(MatriculaCurso matriculaCurso) {
-//        if (matriculaCurso.getStatus().equals(MatriculaCursoStatusEnum.TRANCADO)) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-//                    "Não é permitido fazer essa ação quando o status não é MATRICULADO.");
-//        }
-//    }
+    private Aluno buscarAluno(Long id) {
+        return alunoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Aluno não encontrado"));
+    }
+
+    private Disciplina buscarDisciplina(Long id) {
+        return disciplinaRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Disciplina não encontrada"));
+    }
+
+    private MatriculaCurso buscarCurso(Long id) {
+        return matriculaCursoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Curso não encontrado"));
+    }
+
+    private void validarNotas(Double nota1, Double nota2) {
+        if (nota1 == null || nota2 == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "As duas notas são obrigatórias.");
+        }
+        if (nota1 < 0 || nota1 > 10 || nota2 < 0 || nota2 > 10) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Notas devem estar entre 0 e 10.");
+        }
+    }
+
+    private double calcularMedia(Double nota1, Double nota2) {
+        return (nota1 + nota2) / QNT_NOTAS;
+    }
+
+    private void alterarStatus(MatriculaDisciplina matriculaDisciplina, Double media) {
+        matriculaDisciplina.setStatus(
+                media >= MEDIA_PARA_APROVACAO
+                        ? SituacaoStatusEnum.APROVADO
+                        : SituacaoStatusEnum.REPROVADO
+                );
+    }
+
+    private void validarStatusMatricula(MatriculaDisciplina matriculaDisciplina) {
+        if (matriculaDisciplina.getStatus().equals(SituacaoStatusEnum.TRANCADO)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Não é permitido fazer essa ação quando o status não é MATRICULADO.");
+        }
+
+        if (matriculaDisciplina.getStatus() == SituacaoStatusEnum.APROVADO || matriculaDisciplina.getStatus() == SituacaoStatusEnum.REPROVADO) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Não é possível trancar matrícula já finalizada.");
+        }
+    }
 }

@@ -10,6 +10,9 @@ public record MatriculaDisciplinaRequestDTO(
         @NotNull(message = "Id da disciplina é obrigatório")
         Long disciplinaId,
 
+        @NotNull(message = "Id do curso é obrigatório")
+        Long matriculaCursoId,
+
         @NotNull(message = "Ano letivo é obrigatório")
         Integer anoLetivo,
 
