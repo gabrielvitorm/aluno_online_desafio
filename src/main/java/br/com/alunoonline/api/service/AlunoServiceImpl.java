@@ -74,7 +74,6 @@ public class AlunoServiceImpl implements AlunoService {
         return alunoMapper.toDTO(alunoRepository.save(aluno));
     }
 
-    @PreAuthorize("hasRole('COORDENADOR')")
     @Transactional
     @Override
     public void deletarAluno(Long id) {
