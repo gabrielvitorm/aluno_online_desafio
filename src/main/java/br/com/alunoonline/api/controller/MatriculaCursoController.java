@@ -59,7 +59,7 @@ public class MatriculaCursoController {
         return ResponseEntity.ok(matriculaEditada);
     }
 
-    @PatchMapping("/deletar/{id}")
+    @DeleteMapping("/deletar/{id}")
     public ResponseEntity<MatriculaCursoResponseDTO> deletarMatricula(@PathVariable Long id) {
         return ResponseEntity.ok(matriculaCursoService.deletarMatricula(id));
     }

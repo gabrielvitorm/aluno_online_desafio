@@ -45,7 +45,7 @@ public class AlunoController {
         return ResponseEntity.ok(alunoAtualizado);
     }
 
-    @PatchMapping("/excluir/{id}")
+    @DeleteMapping("/excluir/{id}")
     public ResponseEntity<AlunoResponseDTO> deletarAluno(@PathVariable Long id) {
         return ResponseEntity.ok(alunoService.deletarAluno(id));
     }

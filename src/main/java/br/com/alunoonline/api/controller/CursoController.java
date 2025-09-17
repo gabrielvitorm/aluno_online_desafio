@@ -44,7 +44,7 @@ public class CursoController {
         return ResponseEntity.ok(cursoEditado);
     }
 
-    @PatchMapping("/excluir/{id}")
+    @DeleteMapping("/excluir/{id}")
     public ResponseEntity<CursoResponseDTO> excluirCurso(@PathVariable Long id) {
         CursoResponseDTO cursoExcluido = cursoService.deletarCurso(id);
 

@@ -44,7 +44,7 @@ public class DisciplinaController {
         return ResponseEntity.ok(disciplinaEditada);
     }
 
-    @PatchMapping("/excluir/{id}")
+    @DeleteMapping("/excluir/{id}")
     public ResponseEntity<DisciplinaResponseDTO> deletarDisciplina(@PathVariable Long id) {
         DisciplinaResponseDTO disciplinaExcluida = disciplinaService.deletarDisciplina(id);
 

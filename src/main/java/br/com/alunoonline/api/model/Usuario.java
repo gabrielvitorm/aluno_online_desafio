@@ -31,4 +31,12 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "aluno_id")
+    private Aluno aluno;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "professor_id")
+    private Professor professor;
 }

@@ -15,6 +15,7 @@ import br.com.alunoonline.api.repository.MatriculaDisciplinaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -33,6 +34,7 @@ public class MatriculaDisciplinaServiceImpl implements MatriculaDisciplinaServic
     private final MatriculaCursoRepository matriculaCursoRepository;
     private final MatriculaDisciplinaMapper matriculaDisciplinaMapper;
 
+    @PreAuthorize("hasAnyRole('ALUNO','COORDENADOR')")
     @Transactional
     @Override
     public MatriculaDisciplinaResponseDTO criarMatricula(MatriculaDisciplinaRequestDTO dto) {

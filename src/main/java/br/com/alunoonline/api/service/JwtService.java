@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private final String SECRET_KEY = "sua-chave-super-secreta-de-256bits-para-teste";
+    private final String SECRET_KEY = "hN9/8zjJ9dH1yH2PvGm2h4NqvazZ3k4C8yS5mWwT8Fo=";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

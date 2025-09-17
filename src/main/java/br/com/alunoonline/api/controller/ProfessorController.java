@@ -44,7 +44,7 @@ public class ProfessorController {
         return ResponseEntity.ok(professorAtualizado);
     }
 
-    @PatchMapping("/deletar/{id}")
+    @DeleteMapping("/deletar/{id}")
     public ResponseEntity<ProfessorResponseDTO> deletarProfessor(@PathVariable Long id) {
         ProfessorResponseDTO professorExcluido = professorService.deletarProfessor(id);
 

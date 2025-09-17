@@ -11,6 +11,7 @@ import br.com.alunoonline.api.repository.CursoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -73,6 +74,7 @@ public class AlunoServiceImpl implements AlunoService {
         return alunoMapper.toDTO(alunoRepository.save(aluno));
     }
 
+    @PreAuthorize("hasRole('COORDENADOR')")
     @Transactional
     @Override
     public AlunoResponseDTO deletarAluno(Long id) {

@@ -9,8 +9,10 @@ import br.com.alunoonline.api.model.Professor;
 import br.com.alunoonline.api.repository.CursoRepository;
 import br.com.alunoonline.api.repository.DisciplinaRepository;
 import br.com.alunoonline.api.repository.ProfessorRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,6 +28,8 @@ public class DisciplinaServiceImpl implements DisciplinaService {
     private final CursoRepository cursoRepository;
 
 
+    @PreAuthorize("hasAnyRole('PROFESSOR','COORDENADOR')")
+    @Transactional
     @Override
     public DisciplinaResponseDTO criarDisciplina(DisciplinaRequestDTO dto) {
         Disciplina disciplina = disciplinaMapper.toEntity(dto);
