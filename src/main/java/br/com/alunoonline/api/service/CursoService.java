@@ -15,5 +15,5 @@ public interface CursoService {
 
     CursoResponseDTO atualizarCurso(Long id, CursoRequestDTO dto);
 
-    CursoResponseDTO deletarCurso(Long id);
+    void deletarCurso(Long id);
 }

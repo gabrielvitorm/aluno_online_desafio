@@ -77,14 +77,14 @@ public class AlunoServiceImpl implements AlunoService {
     @PreAuthorize("hasRole('COORDENADOR')")
     @Transactional
     @Override
-    public AlunoResponseDTO deletarAluno(Long id) {
+    public void deletarAluno(Long id) {
         Aluno aluno = alunoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Aluno não existe!"));
 
         aluno.setExcluido(true);
 
-        return alunoMapper.toDTO(alunoRepository.save(aluno));
+        alunoMapper.toDTO(alunoRepository.save(aluno));
     }
 
     private Curso buscarCurso(Long id) {

@@ -45,9 +45,9 @@ public class DisciplinaController {
     }
 
     @DeleteMapping("/excluir/{id}")
-    public ResponseEntity<DisciplinaResponseDTO> deletarDisciplina(@PathVariable Long id) {
-        DisciplinaResponseDTO disciplinaExcluida = disciplinaService.deletarDisciplina(id);
+    public ResponseEntity<Void> deletarDisciplina(@PathVariable Long id) {
+        disciplinaService.deletarDisciplina(id);
 
-        return ResponseEntity.ok(disciplinaExcluida);
+        return ResponseEntity.noContent().build();
     }
 }

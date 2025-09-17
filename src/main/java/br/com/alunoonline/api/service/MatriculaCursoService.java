@@ -21,5 +21,5 @@ public interface MatriculaCursoService {
 
     MatriculaCursoResponseDTO atualizarMatricula(Long id, MatriculaCursoRequestDTO dto);
 
-    MatriculaCursoResponseDTO deletarMatricula(Long id);
+    void deletarMatricula(Long id);
 }

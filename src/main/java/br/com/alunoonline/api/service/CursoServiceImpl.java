@@ -60,13 +60,13 @@ public class CursoServiceImpl implements CursoService{
 
     @Transactional
     @Override
-    public CursoResponseDTO deletarCurso(Long id) {
+    public void deletarCurso(Long id) {
         Curso curso = cursoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Curso repository"));
 
         curso.setExcluido(true);
 
-        return cursoMapper.toDTO(cursoRepository.save(curso));
+        cursoRepository.save(curso);
     }
 }

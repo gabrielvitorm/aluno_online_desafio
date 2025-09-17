@@ -45,9 +45,9 @@ public class CursoController {
     }
 
     @DeleteMapping("/excluir/{id}")
-    public ResponseEntity<CursoResponseDTO> excluirCurso(@PathVariable Long id) {
-        CursoResponseDTO cursoExcluido = cursoService.deletarCurso(id);
+    public ResponseEntity<Void> excluirCurso(@PathVariable Long id) {
+        cursoService.deletarCurso(id);
 
-        return ResponseEntity.ok(cursoExcluido);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -15,5 +15,5 @@ public interface DisciplinaService {
 
     DisciplinaResponseDTO atualizarDisciplina(Long id, DisciplinaRequestDTO dto);
 
-    DisciplinaResponseDTO deletarDisciplina(Long id);
+    void deletarDisciplina(Long id);
 }

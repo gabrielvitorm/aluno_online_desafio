@@ -60,7 +60,9 @@ public class MatriculaCursoController {
     }
 
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<MatriculaCursoResponseDTO> deletarMatricula(@PathVariable Long id) {
-        return ResponseEntity.ok(matriculaCursoService.deletarMatricula(id));
+    public ResponseEntity<Void> deletarMatricula(@PathVariable Long id) {
+        matriculaCursoService.deletarMatricula(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

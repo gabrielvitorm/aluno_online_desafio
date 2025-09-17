@@ -68,13 +68,13 @@ public class ProfessorServiceImpl implements ProfessorService{
 
     @Transactional
     @Override
-    public ProfessorResponseDTO deletarProfessor(Long id) {
+    public void deletarProfessor(Long id) {
         Professor professor = professorRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Professor não encontrado"));
 
         professor.setExcluido(true);
 
-        return professorMapper.toDTO(professor);
+        professorRepository.save(professor);
     }
 }

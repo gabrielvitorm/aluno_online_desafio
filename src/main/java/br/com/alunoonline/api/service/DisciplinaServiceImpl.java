@@ -72,14 +72,14 @@ public class DisciplinaServiceImpl implements DisciplinaService {
     }
 
     @Override
-    public DisciplinaResponseDTO deletarDisciplina(Long id) {
+    public void deletarDisciplina(Long id) {
         Disciplina disciplina = disciplinaRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Disciplina não encontrada!"));
 
         disciplina.setExcluido(true);
 
-        return disciplinaMapper.toDTO(disciplinaRepository.save(disciplina));
+        disciplinaRepository.save(disciplina);
     }
 
     private Professor buscarProfessor(Long id) {

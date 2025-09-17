@@ -15,5 +15,5 @@ public interface ProfessorService {
 
     ProfessorResponseDTO atualizarProfessor(Long id, ProfessorRequestDTO dto);
 
-    ProfessorResponseDTO deletarProfessor(Long id);
+    void deletarProfessor(Long id);
 }

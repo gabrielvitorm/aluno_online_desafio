@@ -124,14 +124,14 @@ public class MatriculaCursoServiceImpl implements MatriculaCursoService {
 
     @Transactional
     @Override
-    public MatriculaCursoResponseDTO deletarMatricula(Long id) {
+    public void deletarMatricula(Long id) {
         MatriculaCurso matriculaCurso = matriculaCursoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Matricula não encontrada!"));
 
         matriculaCurso.setExcluido(true);
 
-        return matriculaCursoMapper.toDTO(matriculaCurso);
+        matriculaCursoRepository.save(matriculaCurso);
     }
 
     private Aluno buscarAluno(Long id) {
