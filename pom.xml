@@ -139,7 +139,7 @@
 							<groupId>org.mapstruct</groupId>
 							<artifactId>mapstruct-processor</artifactId>
 							<version>1.5.5.Final</version>
-						</path>
+	x					</path>
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>

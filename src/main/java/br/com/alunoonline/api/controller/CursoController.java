@@ -34,6 +34,7 @@ public class CursoController {
         return ResponseEntity.status(201).body(cursoCriado);
     }
 
+    @PreAuthorize("hasRole('COORDENADOR')")
     @Operation(
             summary = "Listar Cursos",
             description = "Lista todos os cursos (apenas registros não excluídos). **Permissão**: autenticado."
@@ -43,6 +44,7 @@ public class CursoController {
         return ResponseEntity.ok(cursoService.listarCursos());
     }
 
+    @PreAuthorize("hasRole('COORDENADOR')")
     @Operation(
             summary = "Obter Curso por ID",
             description = "Retorna um curso pelo ID (não excluído). **Permissão**: autenticado."

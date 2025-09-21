@@ -37,6 +37,7 @@ public class DisciplinaController {
         return ResponseEntity.status(201).body(disciplinaCriada);
     }
 
+    @PreAuthorize("hasRole('COORDENADOR') or (hasRole('PROFESSOR') and @ownershipEvaluator.isProfessorDaDisciplina(#id, authentication))")
     @Operation(
             summary = "Listar Disciplinas",
             description = "Lista todas as disciplinas ativas (não excluídas). **Permissão**: autenticado."
@@ -46,6 +47,7 @@ public class DisciplinaController {
         return ResponseEntity.ok(disciplinaService.listarDisciplinas());
     }
 
+    @PreAuthorize("hasRole('COORDENADOR') or (hasRole('PROFESSOR') and @ownershipEvaluator.isProfessorDaDisciplina(#id, authentication))")
     @Operation(
             summary = "Obter Disciplina por ID",
             description = "Retorna a disciplina pelo ID (não excluída). **Permissão**: autenticado."
